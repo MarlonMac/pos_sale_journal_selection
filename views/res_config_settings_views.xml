@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_pos_journal" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.pos.journal</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//div[@id='pos_accounting_section']" position="inside">
+                
+                <div class="col-12 col-lg-6 o_setting_box" id="pos_journal_selection">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Selección de Diario (Factura PoS)</span>
+                        <div class="text-muted">
+                            Configurar diarios para la facturación desde el PoS
+                        </div>
+                        <div class="content-group mt16">
+                            <div class="row">
+                                <label string="Diario por Defecto" 
+                                       for="pos_default_journal_id" 
+                                       class="col-lg-3 o_light_label"/>
+                                <field name="pos_default_journal_id"
+                                       context="{'default_type': 'sale'}"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </div>
+                            <div class="row mt-2">
+                                <label string="Diarios Permitidos" 
+                                       for="pos_selectable_journal_ids" 
+                                       class="col-lg-3 o_light_label"/>
+                                <field name="pos_selectable_journal_ids"
+                                       widget="many2many_tags"
+                                       context="{'default_type': 'sale'}"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

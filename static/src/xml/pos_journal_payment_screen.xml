@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="pos_sale_journal_selection.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('js_invoice')]" position="after">
+            
+            <div class="journal-selector-container" 
+                 t-if="currentOrder.is_to_invoice() &amp;&amp; saleJournals.length > 0">
+                
+                <div class="payment-buttons-row">
+                    <span>Diario de Factura:</span>
+                    <select class="o_input" t-on-change="onJournalChange">
+                        
+                        <t t-foreach="saleJournals" t-as="journal" t-key="journal.id">
+                            
+                            <option t-att-value="journal.id" 
+                                    t-att-selected="journal.id === state.selectedJournalId">
+                                <t t-esc="journal.name"/>
+                            </option>
+                        </t>
+                        
+                    </select>
+                </div>
+            </div>
+
+        </xpath>
+    </t>
+
+</templates>
