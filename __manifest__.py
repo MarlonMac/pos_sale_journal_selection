@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
 {
     'name': 'PoS: Selección de Diario de Venta',
     'version': '16.0.1.0.2',
     'category': 'Point of Sale',
-    'summary': 'Permite seleccionar un diario de venta específico al facturar desde el PoS.',
-    'author': 'Marlon Macario',
-    'website': 'https://github.com/MarlonMac',
     'depends': ['point_of_sale', 'account'],
     'data': [
         'security/ir.model.access.csv',

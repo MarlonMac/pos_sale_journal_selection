@@ -1,12 +1,6 @@
-/*
- * models.js
- * CORREGIDO DE NUEVO:
- * Volvemos a leer 'default_journal_id' como un array [id, "Nombre"]
- * (basado en el último log de la consola).
- */
 odoo.define('pos_sale_journal_selection.Order', function(require) {
     'use-strict';
-    console.log('DEBUG: Cargando pos_sale_journal_selection.Order (models.js - LEGACY)');
+    console.log('DEBUG: Cargando pos_sale_journal_selection.Order (models.js - FINAL)');
 
     const { Order, PosGlobalState } = require('point_of_sale.models');
     const { patch } = require('web.utils');
@@ -16,10 +10,8 @@ odoo.define('pos_sale_journal_selection.Order', function(require) {
         init_from_JSON: function (json) {
             console.log('DEBUG: Order.init_from_JSON INICIO');
             
-            // --- CORRECCIÓN BASADA EN EL LOG ---
-            // El log muestra: Proxy(Array) {0: 1, 1: 'Customer Invoices'}
             const default_journal_id = this.pos.config.default_journal_id 
-                                        ? this.pos.config.default_journal_id[0] // Leer ID de [0]
+                                        ? this.pos.config.default_journal_id[0]
                                         : null;
             
             this.journal_id = json.journal_id || default_journal_id || null;
@@ -34,14 +26,16 @@ odoo.define('pos_sale_journal_selection.Order', function(require) {
                 journal_id: this.get_journal()
             });
         },
+        
         set_journal(journal_id) {
             this.journal_id = journal_id;
         },
+        
         get_journal() {
             return this.journal_id;
         }
     });
-    console.log('DEBUG: Parche pos_sale_journal_selection.Order APLICADO (LEGACY)');
+    console.log('DEBUG: Parche pos_sale_journal_selection.Order APLICADO');
 
     patch(PosGlobalState.prototype, 'pos_sale_journal_selection.PosGlobalState', {
         async _processData(loadedData) {
@@ -49,20 +43,25 @@ odoo.define('pos_sale_journal_selection.Order', function(require) {
             
             console.log('DEBUG: Procesando sale_journals...');
             
-            const allJournals = this.journals || [];
+            const customJournals = loadedData['custom_pos_journals'] || [];
             
-            // --- CORRECCIÓN BASADA EN EL LOG ---
+            console.log('DEBUG: custom_pos_journals recibidos:', JSON.stringify(customJournals.map(j => ({id: j.id, name: j.name, type: j.type}))));
+            
+            if (customJournals.length > 0) {
+                this.journals = customJournals;
+                console.log('✅ this.journals INYECTADO con', customJournals.length, 'journals');
+            }
+            
             const defaultJournalId = this.config.default_journal_id 
-                                     ? this.config.default_journal_id[0] // Leer ID de [0]
+                                     ? this.config.default_journal_id[0]
                                      : null;
-            const saleJournalIds = this.config.selectable_journal_ids || []; 
+            const saleJournalIds = this.config.selectable_journal_ids || [];
             
-            console.log('DEBUG: this.config.default_journal_id (ID por defecto):', defaultJournalId);
-            console.log('DEBUG: this.config.selectable_journal_ids (IDs permitidos):', JSON.stringify(saleJournalIds));
-            
-            console.log('DEBUG: this.journals (TODOS los diarios cargados):', JSON.stringify(allJournals.map(j => ({id: j.id, name: j.name, type: j.type}))));
+            console.log('DEBUG: default_journal_id:', defaultJournalId);
+            console.log('DEBUG: selectable_journal_ids:', JSON.stringify(saleJournalIds));
+            console.log('DEBUG: this.journals después de inyección:', JSON.stringify(this.journals.map(j => ({id: j.id, name: j.name, type: j.type}))));
 
-            let journals = allJournals.filter(journal => 
+            let journals = this.journals.filter(journal => 
                 journal.type === 'sale' && (saleJournalIds.includes(journal.id) || journal.id === defaultJournalId)
             );
             
@@ -71,5 +70,5 @@ odoo.define('pos_sale_journal_selection.Order', function(require) {
             console.log(`DEBUG: ${this.sale_journals.length} sale_journals cargados (final).`);
         }
     });
-    console.log('DEBUG: Parche pos_sale_journal_selection.PosGlobalState APLICADO (LEGACY)');
+    console.log('DEBUG: Parche pos_sale_journal_selection.PosGlobalState APLICADO');
 });

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
     
-    <t t-name="pos_sale_journal_selection.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension" owl="1">
+    <t t-name="pos_sale_journal_selection.PaymentScreen" 
+       t-inherit="point_of_sale.PaymentScreen" 
+       t-inherit-mode="extension" 
+       owl="1">
+       
+        <!-- Agregar selector DESPUÉS de los controles de pago -->
         <xpath expr="//div[hasclass('payment-controls')]" position="after">
             
-            <div class="paymentmethods"> <p class="title-category">DIARIO DE VENTA</p>
+            <!-- SIEMPRE visible, sin condiciones -->
+            <div class="paymentmethods" t-if="saleJournals.length > 0">
+                <p class="title-category">DIARIO DE FACTURA</p>
                 
-                <t t-if="saleJournals.length > 0">
-                    <t t-foreach="saleJournals" t-as="journal" t-key="journal.id">
-                        <div class="button paymentmethod"
-                             t-att-class="{ 'highlight': journal.id === currentOrder.get_journal() }"
-                             t-on-click="() => this.selectSaleJournal(journal)">
-                            <div class="payment-name">
-                                <t t-esc="journal.name"/>
-                            </div>
+                <t t-foreach="saleJournals" t-as="journal" t-key="journal.id">
+                    <div class="button paymentmethod"
+                         t-att-class="{ 'highlight': journal.id === currentJournalId }"
+                         t-on-click="() => this.selectSaleJournal(journal)">
+                        <div class="payment-name">
+                            <t t-esc="journal.name"/>
                         </div>
-                    </t>
-                </t>
-                
-                <t t-if="saleJournals.length === 0">
-                    <div class="p-3"> 
-                        No hay diarios de venta configurados.
                     </div>
                 </t>
                 
             </div>
+            
         </xpath>
     </t>
 
