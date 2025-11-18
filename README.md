@@ -1,30 +1,28 @@
-# PoS: Selección de Diario de Venta (pos_sale_journal_selection)
+# POS Sale Journal Selection 🇬🇹
 
-Este módulo extiende la funcionalidad del Punto de Venta de Odoo 16 Community para permitir al usuario seleccionar un diario de venta específico al momento de generar una factura desde la pantalla de pago.
+![License: LGPL-3](https://img.shields.io/badge/license-LGPL--3-blue.svg)
+![Odoo: 16.0](https://img.shields.io/badge/Odoo-16.0-purple.svg)
 
-## Funcionalidad
+Este módulo para **Odoo 16 Community Edition** resuelve una limitación común: la incapacidad de elegir un diario de facturación diferente (ej. Factura Cambiaria, Factura Especial, Exportación) directamente desde la pantalla de pago del PoS.
 
-Por defecto, Odoo PoS utiliza un único diario de ventas (definido en la configuración del PoS) para todas las facturas. Este módulo añade:
+## 🚀 Funcionalidades
 
-* Un selector de "Diario de Factura" en la pantalla de pago del PoS.
-* Este selector solo aparece cuando el botón **"Factura de cliente"** está activado.
-* La lista de diarios en el selector es configurable por cada Punto de Venta.
+- [x] **Configuración:** Elige qué diarios específicos aparecen en cada tienda PoS.
+- [x] **Interfaz Intuitiva:** Botones integrados en la *PaymentScreen*.
+- [x] **Backend Sincronizado:** La factura se crea correctamente en el diario seleccionado, no en el predeterminado.
 
-## Configuración
+## 🛠️ Instalación
 
-1.  Después de instalar el módulo, vaya a **Punto de Venta > Configuración > Punto de Venta**.
-2.  Edite el PoS que desea configurar.
-3.  En la sección **Facturación y Recibos**, encontrará dos nuevos campos:
-    * **Diario de Ventas por Defecto (Factura):** El diario que se seleccionará automáticamente al activar la facturación.
-    * **Diarios de Venta Permitidos (Factura):** La lista completa de diarios entre los que el cajero puede elegir.
+1. Clona este repositorio en tu carpeta de `addons`.
+2. Instala el módulo `pos_sale_journal_selection`.
+3. Ve a **Punto de Venta > Configuración > Ajustes**.
+4. En la sección **Punto de Venta**, busca "Diarios de Venta Seleccionables" y añade los diarios deseados.
 
-**Importante:** Para que el selector aparezca en el PoS, debe haber al menos un diario configurado en "Diarios de Venta Permitidos".
+## 🤝 Contribuciones
 
-## Funcionamiento
+Desarrollado por **Marlon Macario** como aporte a la iniciativa **OdooLibreGT**.
+¡Los Pull Requests son bienvenidos en [GitHub](https://github.com/MarlonMac)!
 
-1.  Inicie una sesión de PoS.
-2.  Añada productos al carrito y vaya a la pantalla de "Pago".
-3.  Haga clic en el botón "Factura de cliente".
-4.  Automáticamente, aparecerá un nuevo selector debajo del botón, pre-seleccionado con el "Diario por Defecto".
-5.  Si es necesario, el cajero puede cambiar el diario usando este selector.
-6.  Al validar el pago, la factura generada se registrará en el diario seleccionado.
+## 📄 Licencia
+
+Este software está bajo la licencia **LGPL-3**.
